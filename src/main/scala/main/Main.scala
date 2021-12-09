@@ -6,9 +6,9 @@ import scala.io.Source
 object Main extends App {
   private val fileName = if (args.length > 0) args(0) else "testfile"
   try {
-    val bufferedSource = Source.fromFile(fileName)
-    Parser.parse(bufferedSource)
-    bufferedSource.close()
+    val source = Source.fromFile(fileName)
+    Parser.parse(source)
+    source.close()
   } catch {
     case e: Exception => println(e)
   }
