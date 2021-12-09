@@ -1,7 +1,7 @@
 package roman
 
 object RomanNumeralService {
-  private val RomanNumerals = Map(
+  private val romanNumerals = Map(
     "I" -> 1,
     "V" -> 5,
     "X" -> 10,
@@ -29,7 +29,7 @@ object RomanNumeralService {
   )
 
   def get(roman: String): Option[Int] = {
-    RomanNumerals.get(roman)
+    romanNumerals.get(roman)
   }
 
   private def validateRoman(roman: List[String]): Unit = {
@@ -59,10 +59,10 @@ object RomanNumeralService {
     var sub = 0
     var total = 0
     for (x <- roman.indices) {
-      val amount = RomanNumerals.getOrElse(roman(x), throw new Exception(s"Invalid Roman at ${roman(x)}"))
+      val amount = romanNumerals.getOrElse(roman(x), throw new Exception(s"Invalid Roman at ${roman(x)}"))
       val isLast = x == roman.length - 1
       val next =
-        if (!isLast) RomanNumerals.getOrElse(roman(x + 1), throw new Exception(s"Invalid Roman at ${roman(x+1)}"))
+        if (!isLast) romanNumerals.getOrElse(roman(x + 1), throw new Exception(s"Invalid Roman at ${roman(x+1)}"))
         else 0
       if (next > amount) {
         sub = amount
