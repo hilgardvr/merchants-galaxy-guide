@@ -2,6 +2,7 @@ package parser
 
 import commodity.CommodityService
 import galactic.GalacticService
+import parser.Line._
 import roman.RomanNumeralService
 
 import scala.collection.mutable.ListBuffer
@@ -19,7 +20,7 @@ object Parser {
     )
   }
 
-  private def isGalacticTokenValue(tokens: List[String]): Boolean = {
+  private def isTokenValue(tokens: List[String]): Boolean = {
     tokens.length == 3 && tokens(1) == "is" && RomanNumeralService.get(tokens(2)).isDefined
   }
 
@@ -35,31 +36,55 @@ object Parser {
     tokens.length > 5 && tokens.last == "?" && tokens.slice(0, 4).mkString(" ") == CREDITS_REQUEST
   }
 
-  def lineParser(line: String): Option[String] = {
+  private def getLine(tokens: List[String]): Line = {
+    if (isTokenValue(tokens)) TOKEN_VALUE
+    else if (isCommodityValue(tokens)) COMMODITY_VALUE
+    else if (isTokenRequest(tokens)) TOKEN_REQUEST
+    else if (isCreditRequest(tokens)) COMMODITY_REQUEST
+    else UNKNOWN
+  }
+
+  private def handleTokenValue(tokens: List[String]): Option[String] = {
+    GalacticService.setGalacticToRoman(tokens.head, tokens.last)
+    None
+  }
+
+  private def handleCommodityValue(tokens: List[String]): Option[String] = {
+    val commodity = tokens(tokens.length - 4)
+    val arabic = arabicFromGalactic(tokens.slice(0, tokens.length - 4))
+    val credits = tokens(tokens.length - 2).toDouble
+    val price = credits / arabic
+    CommodityService.setCommodityPrice(commodity, price)
+    None
+  }
+
+  private def handleTokenRequest(tokens: List[String]): Option[String] = {
+    val galaticAmounts = tokens.slice(3, tokens.length - 1)
+    val arabic = arabicFromGalactic(galaticAmounts)
+    Option(s"${galaticAmounts.mkString(" ")} is $arabic")
+  }
+
+  private def handleCommodityRequest(tokens: List[String]): Option[String] = {
+    val commodity = tokens(tokens.length - 2)
+    val commodityPrice = CommodityService.getCommodityPrice(commodity)
+    val galacticAmounts = tokens.slice(4, tokens.length - 2)
+    val arabic = arabicFromGalactic(galacticAmounts)
+    val price = arabic * commodityPrice
+    Option(s"${galacticAmounts.mkString(" ")} $commodity is ${price.round} Credits")
+  }
+
+  private def handleUnkownRequest(): Option[String] = {
+    Option(UNKNOWN_REQUEST)
+  }
+
+  private def lineParser(line: String): Option[String] = {
     val tokens = line.split(" ").toList
-    if (isGalacticTokenValue(tokens)) {
-      GalacticService.setGalacticToRoman(tokens.head, tokens.last)
-      None
-    } else if (isCommodityValue(tokens)) {
-      val commodity = tokens(tokens.length - 4)
-      val arabic = arabicFromGalactic(tokens.slice(0, tokens.length - 4))
-      val credits = tokens(tokens.length - 2).toDouble
-      val price = credits / arabic
-      CommodityService.setCommodityPrice(commodity, price)
-      None
-    } else if (isTokenRequest(tokens)) {
-      val galaticAmounts = tokens.slice(3, tokens.length - 1)
-      val arabic = arabicFromGalactic(galaticAmounts)
-      Option(s"${galaticAmounts.mkString(" ")} is $arabic")
-    } else if (isCreditRequest(tokens)) {
-      val commodity = tokens(tokens.length - 2)
-      val commodityPrice = CommodityService.getCommodityPrice(commodity)
-      val galacticAmounts = tokens.slice(4, tokens.length - 2)
-      val arabic = arabicFromGalactic(galacticAmounts)
-      val price = arabic * commodityPrice
-      Option(s"${galacticAmounts.mkString(" ")} $commodity is ${price.round} Credits")
-    } else {
-      Option(UNKNOWN_REQUEST)
+    getLine(tokens) match {
+      case TOKEN_VALUE => handleTokenValue(tokens)
+      case COMMODITY_VALUE => handleCommodityValue(tokens)
+      case TOKEN_REQUEST => handleTokenRequest(tokens)
+      case COMMODITY_REQUEST => handleCommodityRequest(tokens)
+      case _ => handleUnkownRequest()
     }
   }
 
