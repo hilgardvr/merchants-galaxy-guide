@@ -20,15 +20,24 @@ class RomanNumeralServiceSpec extends AnyFlatSpec with Matchers {
       RomanNumeralService.romanToArabic(List("I","I")) shouldEqual 2
       RomanNumeralService.romanToArabic(List("V","I")) shouldEqual 6
       RomanNumeralService.romanToArabic(List("I","V")) shouldEqual 4
-    RomanNumeralService.romanToArabic(List("X")) shouldEqual 10
-    RomanNumeralService.romanToArabic(List("C","D")) shouldEqual 400
-    RomanNumeralService.romanToArabic(List("C","D","X")) shouldEqual 410
-    RomanNumeralService.romanToArabic(List("D","M","C","D","X","V","I","V","I","I")) shouldEqual 921
-    intercept[Exception] {
-      RomanNumeralService.romanToArabic(List("I", "I", "I", "I"))
-    }
-    intercept[Exception] {
-      RomanNumeralService.romanToArabic(List("D", "D"))
-    }
+      RomanNumeralService.romanToArabic(List("X")) shouldEqual 10
+      RomanNumeralService.romanToArabic(List("C","D")) shouldEqual 400
+      RomanNumeralService.romanToArabic(List("C","D","X")) shouldEqual 410
+      RomanNumeralService.romanToArabic(List("M","C","D","X","V","I","V","I","I")) shouldEqual 1421
+      RomanNumeralService.romanToArabic(List("M","M","M","D","C","C","X","X","I","V")) shouldEqual 3724
+      RomanNumeralService.romanToArabic(List("I", "X")) shouldEqual 9
+      RomanNumeralService.romanToArabic(List("C", "D")) shouldEqual 400
+      intercept[Exception] {
+        RomanNumeralService.romanToArabic(List("I", "I", "I", "I"))
+      }
+      intercept[Exception] {
+        RomanNumeralService.romanToArabic(List("D", "D"))
+      }
+      intercept[Exception] {
+        RomanNumeralService.romanToArabic(List("I", "M"))
+      }
+      intercept[Exception] {
+        RomanNumeralService.romanToArabic(List("D", "M"))
+      }
     }
 }
