@@ -2,7 +2,6 @@ package roman
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import roman.RomanNumeralService
 
 class RomanNumeralServiceSpec extends AnyFlatSpec with Matchers {
   "Roman numeral map" should
@@ -19,5 +18,17 @@ class RomanNumeralServiceSpec extends AnyFlatSpec with Matchers {
   "RomanNumeralService" should
     "convert roman numerals to arabic" in {
       RomanNumeralService.romanToArabic(List("I","I")) shouldEqual 2
+      RomanNumeralService.romanToArabic(List("V","I")) shouldEqual 6
+      RomanNumeralService.romanToArabic(List("I","V")) shouldEqual 4
+    RomanNumeralService.romanToArabic(List("X")) shouldEqual 10
+    RomanNumeralService.romanToArabic(List("C","D")) shouldEqual 400
+    RomanNumeralService.romanToArabic(List("C","D","X")) shouldEqual 410
+    RomanNumeralService.romanToArabic(List("D","M","C","D","X","V","I","V","I","I")) shouldEqual 921
+    intercept[Exception] {
+      RomanNumeralService.romanToArabic(List("I", "I", "I", "I"))
+    }
+    intercept[Exception] {
+      RomanNumeralService.romanToArabic(List("D", "D"))
+    }
     }
 }
