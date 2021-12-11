@@ -10,10 +10,7 @@ object CommodityService {
   }
 
   def getCommodityPrice(commodity: String): Option[Double] = {
-    commodityPrice.get(commodity) match {
-      case Some(price) => Option(price)
-      case _ => None
-    }
+    commodityPrice.get(commodity)
   }
 
 }
