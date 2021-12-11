@@ -17,4 +17,10 @@ object GalacticService {
     galacticToRoman.get(galacticUnit)
   }
 
+  def arabicFromGalactic(galacticTokens: List[String]): Option[Int] = {
+    RomanNumeralService.romanToArabic(
+      galacticTokens.flatMap(token => getGalacticToRoman(token))
+    )
+  }
+
 }

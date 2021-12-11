@@ -1,11 +1,11 @@
-package parser
+package line
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 import scala.io.Source
 
-class ParserSpec extends AnyFlatSpec with Matchers {
+class LineFactorySpec extends AnyFlatSpec with Matchers {
   private val source = Source.fromString(
     """glob is I
       |prok is V
@@ -28,6 +28,6 @@ class ParserSpec extends AnyFlatSpec with Matchers {
     Some("I have no idea what you are talking about"))
 
   "Parser" should "return a parsed list of Optional Strings" in {
-    Parser.parse(source) shouldEqual result
+    LineFactory.build(source).map(_.handle()) shouldEqual result
   }
 }

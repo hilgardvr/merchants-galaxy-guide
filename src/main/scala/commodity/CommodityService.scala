@@ -9,10 +9,10 @@ object CommodityService {
     commodityPrice(commodity) = price
   }
 
-  def getCommodityPrice(commodity: String): Double = {
+  def getCommodityPrice(commodity: String): Option[Double] = {
     commodityPrice.get(commodity) match {
-      case Some(price) => price
-      case _ => throw new Exception(s"No commodity listed as $commodity")
+      case Some(price) => Option(price)
+      case _ => None
     }
   }
 
