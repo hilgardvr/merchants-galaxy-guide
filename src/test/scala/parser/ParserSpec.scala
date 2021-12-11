@@ -20,14 +20,14 @@ class ParserSpec extends AnyFlatSpec with Matchers {
       |how many Credits is glob prok Iron ?
       |how much wood could a woodchuck chuck if a woodchuck could chuck wood?""".stripMargin)
 
-  private val result =
-    """pish tegj glob glob is 42
-      |glob prok Silver is 68 Credits
-      |glob prok Gold is 57800 Credits
-      |glob prok Iron is 782 Credits
-      |I have no idea what you are talking about""".stripMargin
+  private val result = List(None, None, None, None, None, None, None,
+    Some("pish tegj glob glob is 42"),
+    Some("glob prok Silver is 68 Credits"),
+    Some("glob prok Gold is 57800 Credits"),
+    Some("glob prok Iron is 782 Credits"),
+    Some("I have no idea what you are talking about"))
 
-  "Parser" should "return correct result" in {
+  "Parser" should "return a parsed list of Optional Strings" in {
     Parser.parse(source) shouldEqual result
   }
 }

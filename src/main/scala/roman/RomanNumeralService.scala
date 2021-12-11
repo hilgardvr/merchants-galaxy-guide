@@ -54,23 +54,27 @@ object RomanNumeralService {
     }
   }
 
-  def romanToArabic(roman: List[String]): Int = {
-    validateRoman(roman)
-    var sub = 0
-    var total = 0
-    for (x <- roman.indices) {
-      val amount = romanNumerals.getOrElse(roman(x), throw new Exception(s"Invalid Roman at ${roman(x)}"))
-      val isLast = x == roman.length - 1
-      val next =
-        if (!isLast) romanNumerals.getOrElse(roman(x + 1), throw new Exception(s"Invalid Roman at ${roman(x+1)}"))
-        else 0
-      if (next > amount) {
-        sub = amount
-      } else {
-        total = total + amount - sub
-        sub = 0
+  def romanToArabic(roman: List[String]): Option[Int] = {
+    try {
+      validateRoman(roman)
+      var sub = 0
+      var total = 0
+      for (x <- roman.indices) {
+        val amount = romanNumerals.getOrElse(roman(x), throw new Exception(s"Invalid Roman at ${roman(x)}"))
+        val isLast = x == roman.length - 1
+        val next =
+          if (!isLast) romanNumerals.getOrElse(roman(x + 1), throw new Exception(s"Invalid Roman at ${roman(x + 1)}"))
+          else 0
+        if (next > amount) {
+          sub = amount
+        } else {
+          total = total + amount - sub
+          sub = 0
+        }
       }
+      Option(total)
+    } catch {
+      case _: Exception => None
     }
-    total
   }
 }

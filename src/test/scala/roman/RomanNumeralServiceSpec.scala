@@ -17,27 +17,19 @@ class RomanNumeralServiceSpec extends AnyFlatSpec with Matchers {
 
   "RomanNumeralService" should
     "convert roman numerals to arabic" in {
-      RomanNumeralService.romanToArabic(List("I","I")) shouldEqual 2
-      RomanNumeralService.romanToArabic(List("V","I")) shouldEqual 6
-      RomanNumeralService.romanToArabic(List("I","V")) shouldEqual 4
-      RomanNumeralService.romanToArabic(List("X")) shouldEqual 10
-      RomanNumeralService.romanToArabic(List("C","D")) shouldEqual 400
-      RomanNumeralService.romanToArabic(List("C","D","X")) shouldEqual 410
-      RomanNumeralService.romanToArabic(List("M","C","D","X","V","I","V","I","I")) shouldEqual 1421
-      RomanNumeralService.romanToArabic(List("M","M","M","D","C","C","X","X","I","V")) shouldEqual 3724
-      RomanNumeralService.romanToArabic(List("I", "X")) shouldEqual 9
-      RomanNumeralService.romanToArabic(List("C", "D")) shouldEqual 400
-      intercept[Exception] {
-        RomanNumeralService.romanToArabic(List("I", "I", "I", "I"))
-      }
-      intercept[Exception] {
-        RomanNumeralService.romanToArabic(List("D", "D"))
-      }
-      intercept[Exception] {
-        RomanNumeralService.romanToArabic(List("I", "M"))
-      }
-      intercept[Exception] {
-        RomanNumeralService.romanToArabic(List("D", "M"))
-      }
+      RomanNumeralService.romanToArabic(List("I","I")) shouldEqual Some(2)
+      RomanNumeralService.romanToArabic(List("V","I")) shouldEqual Some(6)
+      RomanNumeralService.romanToArabic(List("I","V")) shouldEqual Some(4)
+      RomanNumeralService.romanToArabic(List("X")) shouldEqual Some(10)
+      RomanNumeralService.romanToArabic(List("C","D")) shouldEqual Some(400)
+      RomanNumeralService.romanToArabic(List("C","D","X")) shouldEqual Some(410)
+      RomanNumeralService.romanToArabic(List("M","C","D","X","V","I","V","I","I")) shouldEqual Some(1421)
+      RomanNumeralService.romanToArabic(List("M","M","M","D","C","C","X","X","I","V")) shouldEqual Some(3724)
+      RomanNumeralService.romanToArabic(List("I", "X")) shouldEqual Some(9)
+      RomanNumeralService.romanToArabic(List("C", "D")) shouldEqual Some(400)
+      RomanNumeralService.romanToArabic(List("I", "I", "I", "I")) shouldEqual None
+      RomanNumeralService.romanToArabic(List("D", "D")) shouldEqual None
+      RomanNumeralService.romanToArabic(List("I", "M")) shouldEqual None
+      RomanNumeralService.romanToArabic(List("D", "M")) shouldEqual None
     }
 }
