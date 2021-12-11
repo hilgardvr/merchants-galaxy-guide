@@ -18,9 +18,12 @@ object GalacticService {
   }
 
   def arabicFromGalactic(galacticTokens: List[String]): Option[Int] = {
-    RomanNumeralService.romanToArabic(
-      galacticTokens.flatMap(token => getGalacticToRoman(token))
-    )
+    val romanTokens = galacticTokens.map(token => getGalacticToRoman(token))
+    if (romanTokens.forall(_.isDefined)) {
+      RomanNumeralService.romanToArabic(romanTokens.flatten)
+    } else {
+      None
+    }
   }
 
 }

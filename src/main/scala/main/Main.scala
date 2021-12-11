@@ -3,6 +3,7 @@ package main
 import line.LineFactory
 import present.Presenter
 
+import java.io.FileNotFoundException
 import scala.io.Source
 
 object Main extends App {
@@ -14,6 +15,6 @@ object Main extends App {
     Presenter.present(processed)
     source.close()
   } catch {
-    case e: Exception => println(e)
+    case e: FileNotFoundException => println(s"File: $fileName could not be found\nUsage sbt \"run <filename>\"")
   }
 }
